@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --science-bg: #07111f;
+  --science-surface: rgba(9, 19, 36, 0.74);
+  --science-surface-strong: rgba(11, 24, 43, 0.92);
+  --science-card: rgba(255, 255, 255, 0.86);
+  --science-card-strong: rgba(255, 255, 255, 0.94);
+  --science-border: rgba(106, 189, 255, 0.2);
+  --science-border-strong: rgba(106, 189, 255, 0.34);
+  --science-text: #e7f0ff;
+  --science-text-muted: #9db1cf;
+  --science-ink: #0f1f35;
+  --science-ink-soft: #4a5d79;
+  --science-accent: #4fb3ff;
+  --science-accent-strong: #1787ff;
+  --science-teal: #22c7b8;
+  --science-success: #1cbe7a;
+  --science-warn: #f2b94b;
+  --science-danger: #e35d7b;
+  --science-shadow: 0 22px 60px rgba(3, 10, 23, 0.28);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background:
+      radial-gradient(circle at top left, rgba(34, 199, 184, 0.16), transparent 32%),
+      radial-gradient(circle at top right, rgba(79, 179, 255, 0.2), transparent 28%),
+      linear-gradient(180deg, #081120 0%, #0b1628 40%, #eef4fb 40%, #f5f8fc 100%);
+    min-height: 100%;
+  }
+
+  body {
+    @apply antialiased;
+    min-height: 100vh;
+    color: var(--science-ink);
+    background: transparent;
+    font-feature-settings: "ss01" on, "cv01" on, "cv11" on;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  body.senior-mode {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  body.senior-mode input,
+  body.senior-mode a {
+    min-height: 50px;
+  }
+
+  body.senior-mode input {
+    font-size: 18px;
+  }
+
+  body.senior-mode h1 {
+    font-size: 2.35rem;
+    line-height: 1.1;
+  }
+
+  body.senior-mode h2 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+
+  body.senior-mode h3 {
+    font-size: 1.35rem;
+    line-height: 1.3;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply min-h-screen;
+    background:
+      radial-gradient(circle at 8% 10%, rgba(79, 179, 255, 0.14), transparent 20%),
+      radial-gradient(circle at 88% 18%, rgba(34, 199, 184, 0.14), transparent 22%),
+      linear-gradient(180deg, rgba(9, 19, 36, 0.94) 0%, rgba(10, 20, 37, 0.96) 16rem, #f4f8fc 16rem, #f6f9fd 100%);
+  }
+
+  .page-header {
+    @apply sticky top-0 z-20 border-b;
+    background: rgba(8, 17, 31, 0.78);
+    border-color: rgba(106, 189, 255, 0.16);
+    backdrop-filter: blur(20px);
+  }
+
+  .hero-panel {
+    @apply rounded-[28px] border px-7 py-7 md:px-10 md:py-9;
+    color: var(--science-text);
+    background-color: rgb(8, 17, 31);
+    background-image:
+      linear-gradient(rgba(106, 189, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(106, 189, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(145deg, rgb(13, 28, 49), rgb(8, 17, 31)),
+      radial-gradient(circle at top right, rgba(79, 179, 255, 0.18), transparent 35%);
+    background-size: 28px 28px, 28px 28px, 100% 100%, 100% 100%;
+    border-color: rgba(106, 189, 255, 0.18);
+    box-shadow: var(--science-shadow);
+  }
+
+  .card {
+    @apply rounded-[24px] border p-6 md:p-7;
+    background: linear-gradient(180deg, var(--science-card-strong), var(--science-card));
+    border-color: rgba(130, 152, 187, 0.16);
+    box-shadow: 0 16px 40px rgba(15, 31, 53, 0.08);
+  }
+
+  .card-soft {
+    @apply rounded-[22px] border p-5;
+    background: rgba(255, 255, 255, 0.68);
+    border-color: rgba(130, 152, 187, 0.15);
+  }
+
+  .metric-card {
+    @apply rounded-[24px] border p-6 text-left;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 249, 255, 0.92));
+    border-color: rgba(106, 189, 255, 0.16);
+    box-shadow: 0 16px 38px rgba(15, 31, 53, 0.06);
+  }
+
+  .science-panel {
+    @apply rounded-[22px] border;
+    background: rgba(8, 17, 31, 0.72);
+    border-color: var(--science-border);
+    color: var(--science-text);
+    box-shadow: var(--science-shadow);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50;
+    color: white;
+    background: linear-gradient(135deg, var(--science-accent), var(--science-accent-strong));
+    box-shadow: 0 14px 28px rgba(23, 135, 255, 0.24);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 32px rgba(23, 135, 255, 0.3);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all;
+    color: var(--science-ink);
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(130, 152, 187, 0.22);
+    box-shadow: 0 10px 24px rgba(15, 31, 53, 0.06);
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+    border-color: rgba(79, 179, 255, 0.36);
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  .nav-pill {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium uppercase tracking-[0.16em];
+    color: var(--science-text-muted);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .soft-pill {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+    background: rgba(79, 179, 255, 0.1);
+    color: var(--science-accent-strong);
+  }
+
+  .science-grid {
+    background-image:
+      linear-gradient(rgba(106, 189, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(106, 189, 255, 0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .senior-summary-card {
+    @apply rounded-[22px] border p-5;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.92));
+    border-color: rgba(130, 152, 187, 0.2);
+    box-shadow: 0 14px 32px rgba(15, 31, 53, 0.05);
+  }
+
+  .section-title {
+    @apply text-sm font-semibold uppercase tracking-[0.2em];
+    color: var(--science-text-muted);
+  }
+
+  .page-section {
+    @apply rounded-[28px] border p-6 md:p-8;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(130, 152, 187, 0.16);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(15, 31, 53, 0.05);
+  }
+}
+
+/* ── SIMPLE MODE: real accessibility, not just bigger ── */
+
+/* Larger tap targets on text buttons */
+body.senior-mode .btn-primary,
+body.senior-mode .btn-secondary {
+  padding: 1rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* More breathing room between sections */
+body.senior-mode main > section + section,
+body.senior-mode main > div + div {
+  margin-top: 1.5rem;
+}
+
+/* Stronger card borders so edges are obvious */
+body.senior-mode .card,
+body.senior-mode .page-section {
+  border-width: 2px;
+  border-radius: 28px;
+}
+
+body.senior-mode .metric-card {
+  border-width: 2px;
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+/* Small text → readable minimum 16px */
+body.senior-mode .text-xs {
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+}
+
+body.senior-mode .text-sm {
+  font-size: 1.05rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Muted text → darker for contrast (WCAG AA) */
+body.senior-mode .text-slate-400 {
+  color: #475569 !important;
+}
+
+body.senior-mode .text-slate-500 {
+  color: #334155 !important;
+}
+
+body.senior-mode .text-slate-600 {
+  color: #1e293b !important;
+}
+
+/* Inputs more visible */
+body.senior-mode input,
+body.senior-mode textarea {
+  border-width: 2px !important;
+  border-color: #94a3b8 !important;
+  font-size: 1.05rem !important;
+}
+
+body.senior-mode input:focus,
+body.senior-mode textarea:focus {
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 0 0 4px rgba(14,165,233,0.15) !important;
+}
+
+/* Tab buttons larger in senior mode */
+body.senior-mode .rounded-full.border.px-4 {
+  padding: 0.6rem 1.25rem !important;
+  font-size: 1rem !important;
+}
+
+/* Page header title larger */
+body.senior-mode .page-header h1 {
+  font-size: 1.5rem !important;
+}
+
+/* Hide utility */
+body.senior-mode .senior-hide {
+  display: none !important;
+}
