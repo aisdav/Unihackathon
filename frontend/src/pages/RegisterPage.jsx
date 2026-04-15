@@ -35,26 +35,39 @@ export default function RegisterPage() {
   return (
     <div className="app-shell flex items-center justify-center px-6 py-10">
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <section className="hero-panel hidden lg:block">
-          <div className="section-title">Регистрация</div>
-          <h1 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight">
-            Создайте рабочий аккаунт и соберите единое пространство для анализа научных ТЗ.
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-            После регистрации можно загружать документы, сравнивать их качество, получать объяснимые замечания
-            и проверять, насколько цель, задачи и KPI связаны между собой.
-          </p>
-          <div className="mt-8 grid gap-3">
+        <section className="hero-panel hidden lg:flex lg:flex-col lg:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{background:'linear-gradient(135deg,#3b9eff,#0c72f5)',boxShadow:'0 4px 16px rgba(12,114,245,0.35)'}}>
+                <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-6-6Z" strokeLinejoin="round"/>
+                  <path d="M9 3v6h10M8 13h8M8 17h5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <span className="text-2xl font-bold tracking-tight text-white" style={{letterSpacing:'-0.03em'}}>
+                tz<span style={{color:'#3b9eff'}}>ex</span>
+              </span>
+            </div>
+            <h1 className="mt-8 max-w-sm text-[2.2rem] font-bold leading-[1.15] tracking-tight text-white">
+              Ваше пространство для работы с ТЗ.
+            </h1>
+            <p className="mt-4 max-w-sm text-base leading-7 text-slate-400">
+              Загружайте документы, сравнивайте качество, получайте понятные замечания и готовые отчёты.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-3">
             {[
-              'Личный кабинет с историей проверок.',
-              'Отдельный отчет по каждому документу.',
-              'Простой режим для пользователей старшего возраста.',
-            ].map((item, index) => (
-              <div key={item} className="flex items-start gap-3 rounded-[20px] border border-white/10 bg-white/5 p-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-400/10 text-sm font-semibold text-cyan-200">
-                  {index + 1}
+              { icon: 'M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z M3 7l9 6 9-6', label: 'История всех проверок в одном месте' },
+              { icon: 'M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z', label: 'Детальный отчёт по каждому документу' },
+              { icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', label: 'Простой режим для любого пользователя' },
+            ].map(({ icon, label }) => (
+              <div key={label} className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/5 px-4 py-3 backdrop-blur">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300">
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={icon}/>
+                  </svg>
                 </div>
-                <div className="text-sm leading-6 text-slate-300">{item}</div>
+                <span className="text-sm font-medium text-slate-300">{label}</span>
               </div>
             ))}
           </div>

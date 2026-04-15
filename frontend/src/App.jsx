@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage'
 import UploadPage from './pages/UploadPage'
 import AnalysisPage from './pages/AnalysisPage'
 import ChatPage from './pages/ChatPage'
+import RagPage from './pages/RagPage'
 
 function PrivateRoute({ children }) {
   const { isAuth } = useAuth()
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/upload" element={<PrivateRoute><UploadPage /></PrivateRoute>} />
             <Route path="/analysis/:docId" element={<PrivateRoute><AnalysisPage /></PrivateRoute>} />
             <Route path="/chat/:docId" element={<PrivateRoute><ChatPage /></PrivateRoute>} />
+            <Route path="/rag" element={<PrivateRoute><RagPage /></PrivateRoute>} />
           </Routes>
           <SeniorModeToggle />
         </BrowserRouter>

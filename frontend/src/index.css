@@ -3,24 +3,48 @@
 @tailwind utilities;
 
 :root {
-  --science-bg: #07111f;
-  --science-surface: rgba(9, 19, 36, 0.74);
-  --science-surface-strong: rgba(11, 24, 43, 0.92);
-  --science-card: rgba(255, 255, 255, 0.86);
-  --science-card-strong: rgba(255, 255, 255, 0.94);
-  --science-border: rgba(106, 189, 255, 0.2);
-  --science-border-strong: rgba(106, 189, 255, 0.34);
-  --science-text: #e7f0ff;
-  --science-text-muted: #9db1cf;
-  --science-ink: #0f1f35;
-  --science-ink-soft: #4a5d79;
-  --science-accent: #4fb3ff;
-  --science-accent-strong: #1787ff;
-  --science-teal: #22c7b8;
-  --science-success: #1cbe7a;
-  --science-warn: #f2b94b;
-  --science-danger: #e35d7b;
-  --science-shadow: 0 22px 60px rgba(3, 10, 23, 0.28);
+  /* tzex brand palette */
+  --tx-bg: #060d1a;
+  --tx-surface: rgba(8, 16, 32, 0.80);
+  --tx-surface-strong: rgba(10, 20, 40, 0.95);
+  --tx-card: rgba(255, 255, 255, 0.92);
+  --tx-card-strong: rgba(255, 255, 255, 0.97);
+  --tx-border: rgba(99, 179, 255, 0.18);
+  --tx-border-strong: rgba(99, 179, 255, 0.32);
+  --tx-text: #ddeeff;
+  --tx-text-muted: #8aaac8;
+  --tx-ink: #0c1a2e;
+  --tx-ink-soft: #3d5470;
+  --tx-accent: #3b9eff;
+  --tx-accent-strong: #0c72f5;
+  --tx-accent-glow: rgba(59, 158, 255, 0.22);
+  --tx-violet: #7c6fff;
+  --tx-teal: #14c4b2;
+  --tx-success: #0fb86a;
+  --tx-warn: #f0a832;
+  --tx-danger: #e04a6a;
+  --tx-shadow: 0 24px 64px rgba(2, 8, 20, 0.36);
+  --tx-shadow-sm: 0 8px 24px rgba(2, 8, 20, 0.18);
+
+  /* legacy aliases so existing components don't break */
+  --science-bg: var(--tx-bg);
+  --science-surface: var(--tx-surface);
+  --science-surface-strong: var(--tx-surface-strong);
+  --science-card: var(--tx-card);
+  --science-card-strong: var(--tx-card-strong);
+  --science-border: var(--tx-border);
+  --science-border-strong: var(--tx-border-strong);
+  --science-text: var(--tx-text);
+  --science-text-muted: var(--tx-text-muted);
+  --science-ink: var(--tx-ink);
+  --science-ink-soft: var(--tx-ink-soft);
+  --science-accent: var(--tx-accent);
+  --science-accent-strong: var(--tx-accent-strong);
+  --science-teal: var(--tx-teal);
+  --science-success: var(--tx-success);
+  --science-warn: var(--tx-warn);
+  --science-danger: var(--tx-danger);
+  --science-shadow: var(--tx-shadow);
 }
 
 @layer base {
@@ -30,9 +54,9 @@
 
   html {
     background:
-      radial-gradient(circle at top left, rgba(34, 199, 184, 0.16), transparent 32%),
-      radial-gradient(circle at top right, rgba(79, 179, 255, 0.2), transparent 28%),
-      linear-gradient(180deg, #081120 0%, #0b1628 40%, #eef4fb 40%, #f5f8fc 100%);
+      radial-gradient(ellipse at 20% 0%, rgba(59, 158, 255, 0.12), transparent 40%),
+      radial-gradient(ellipse at 80% 0%, rgba(124, 111, 255, 0.10), transparent 36%),
+      linear-gradient(180deg, #060d1a 0%, #091422 42%, #eef4fb 42%, #f3f7fd 100%);
     min-height: 100%;
   }
 
@@ -82,16 +106,16 @@
   .app-shell {
     @apply min-h-screen;
     background:
-      radial-gradient(circle at 8% 10%, rgba(79, 179, 255, 0.14), transparent 20%),
-      radial-gradient(circle at 88% 18%, rgba(34, 199, 184, 0.14), transparent 22%),
-      linear-gradient(180deg, rgba(9, 19, 36, 0.94) 0%, rgba(10, 20, 37, 0.96) 16rem, #f4f8fc 16rem, #f6f9fd 100%);
+      radial-gradient(ellipse at 6% 8%, rgba(59, 158, 255, 0.13), transparent 22%),
+      radial-gradient(ellipse at 90% 14%, rgba(124, 111, 255, 0.11), transparent 24%),
+      linear-gradient(180deg, rgba(6, 13, 26, 0.97) 0%, rgba(9, 18, 34, 0.98) 18rem, #f3f7fd 18rem, #f5f8fd 100%);
   }
 
   .page-header {
     @apply sticky top-0 z-20 border-b;
-    background: rgba(8, 17, 31, 0.78);
-    border-color: rgba(106, 189, 255, 0.16);
-    backdrop-filter: blur(20px);
+    background: rgba(6, 13, 26, 0.82);
+    border-color: rgba(59, 158, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(1.4);
   }
 
   .hero-panel {
@@ -139,27 +163,37 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50;
     color: white;
-    background: linear-gradient(135deg, var(--science-accent), var(--science-accent-strong));
-    box-shadow: 0 14px 28px rgba(23, 135, 255, 0.24);
+    background: linear-gradient(135deg, #3b9eff 0%, #0c72f5 100%);
+    box-shadow: 0 4px 16px rgba(12, 114, 245, 0.32), 0 1px 0 rgba(255,255,255,0.12) inset;
+    letter-spacing: 0.01em;
   }
 
   .btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 18px 32px rgba(23, 135, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(12, 114, 245, 0.4), 0 1px 0 rgba(255,255,255,0.12) inset;
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all;
-    color: var(--science-ink);
-    background: rgba(255, 255, 255, 0.84);
-    border: 1px solid rgba(130, 152, 187, 0.22);
-    box-shadow: 0 10px 24px rgba(15, 31, 53, 0.06);
+    color: var(--tx-ink);
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(120, 145, 180, 0.20);
+    box-shadow: 0 2px 8px rgba(12, 26, 46, 0.07), 0 1px 0 rgba(255,255,255,0.8) inset;
   }
 
   .btn-secondary:hover {
     transform: translateY(-1px);
-    border-color: rgba(79, 179, 255, 0.36);
-    background: rgba(255, 255, 255, 0.96);
+    border-color: rgba(59, 158, 255, 0.32);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 16px rgba(12, 26, 46, 0.10);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
   }
 
   .nav-pill {

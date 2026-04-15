@@ -54,3 +54,9 @@ export const getChatHistory = (docId) => api.get(`/chat/${docId}/history`)
 
 // Reports
 export const downloadReport = (docId) => api.get(`/reports/${docId}/pdf`, { responseType: 'blob' })
+
+// RAG knowledge base
+export const getRagStats    = ()       => api.get('/rag/stats')
+export const getRagExamples = (limit = 100, offset = 0) => api.get('/rag/examples', { params: { limit, offset } })
+export const addRagExample  = (data)   => api.post('/rag/examples', data)
+export const deleteRagExample = (id)   => api.delete(`/rag/examples/${encodeURIComponent(id)}`)

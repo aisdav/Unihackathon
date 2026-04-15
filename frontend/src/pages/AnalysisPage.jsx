@@ -173,19 +173,28 @@ export default function AnalysisPage() {
     'bg-rose-50 text-rose-700 border-rose-200'
 
   return (
-    <div className="app-shell">
-      <header className="page-header px-6 py-4">
+    <div className={seniorMode ? 'min-h-screen bg-slate-50' : 'app-shell'}>
+      <header className={seniorMode
+        ? 'sticky top-0 z-20 border-b border-slate-200 bg-white px-6 py-4 shadow-sm'
+        : 'page-header px-6 py-4'
+      }>
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Link to="/dashboard" className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10">
+            <Link to="/dashboard" className={`flex h-11 w-11 items-center justify-center rounded-2xl border transition ${
+              seniorMode
+                ? 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+                : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10'
+            }`}>
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M15 19 8 12l7-7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
             <div>
               {!seniorMode && <div className="nav-pill w-fit">Analysis results</div>}
-              <div className="mt-2 flex flex-wrap items-center gap-3">
-                <h1 className="text-xl font-semibold tracking-tight text-slate-50">Результаты анализа документа</h1>
+              <div className={`${!seniorMode ? 'mt-2' : ''} flex flex-wrap items-center gap-3`}>
+                <h1 className={`font-semibold tracking-tight ${seniorMode ? 'text-xl text-slate-900' : 'text-xl text-slate-50'}`}>
+                  {seniorMode ? 'Результаты проверки документа' : 'Результаты анализа документа'}
+                </h1>
                 {isCompleted && (
                   <span className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-semibold ${scoreTone}`}>
                     {score} / 100
@@ -195,7 +204,7 @@ export default function AnalysisPage() {
             </div>
           </div>
 
-          {isCompleted && (
+          {isCompleted && !seniorMode && (
             <div className="flex flex-wrap gap-2">
               <button onClick={handleDownloadPDF} disabled={downloading} className="btn-secondary">
                 <ActionIcon type="download" />
@@ -249,246 +258,280 @@ export default function AnalysisPage() {
 
         {isCompleted && (
           <>
-            <section className="hero-panel">
-              <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-                <div>
-                  {!seniorMode && <div className="section-title">Executive summary</div>}
-                  <h2 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-white md:text-[2.35rem]">
-                    {seniorMode
-                      ? 'Анализ завершён. Ниже — оценка документа, замечания и рекомендации.'
-                      : 'Документ уже получил расчет score, логическую проверку и объяснимые замечания.'}
-                  </h2>
-                  <p className="mt-4 max-w-3xl text-base leading-7 text-slate-200">
-                    {analysis.document_summary || 'Система подготовила структурную оценку, выявила слабые места и собрала улучшения по ключевым разделам.'}
-                  </p>
-                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
-                      <div className="text-sm text-slate-400">Общий score</div>
-                      <div className="mt-2 text-3xl font-semibold text-white">{score}</div>
-                    </div>
-                    <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
-                      <div className="text-sm text-slate-400">Проблем найдено</div>
-                      <div className="mt-2 text-3xl font-semibold text-cyan-300">{issueCount}</div>
-                    </div>
-                    <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
-                      <div className="text-sm text-slate-400">Связность документа</div>
-                      <div className="mt-2 text-3xl font-semibold text-emerald-300">{analysis.consistency_score || 0}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-[26px] border border-white/10 bg-white/5 p-5 backdrop-blur">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Приоритет для доработки</div>
-                  <div className="mt-3 text-xl font-semibold text-white">
-                    {topIssue?.section_title || 'Сначала проверьте раздел рекомендаций'}
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">
-                    {topIssue?.explanation || primaryAction}
-                  </p>
-                  {!seniorMode && (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <div className="nav-pill">Critical: {criticalCount}</div>
-                      <div className="nav-pill">Missing: {missingSections.length}</div>
-                      <div className="nav-pill">KPI ready</div>
-                    </div>
-                  )}
-                  {seniorMode && criticalCount > 0 && (
-                    <div className="mt-5 rounded-[16px] border border-rose-200 bg-rose-50/60 px-4 py-2 text-sm font-semibold text-rose-700">
-                      Критичных замечаний: {criticalCount} — требуют исправления в первую очередь
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
-
-            {seniorMode && (
-              <section className="mt-6 grid gap-4 md:grid-cols-3">
-                <div className="senior-summary-card">
-                  <div className="section-title text-slate-500">Что хорошо</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-900">Документ уже проанализирован</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Общая оценка: <strong>{score} из 100</strong>. Видно, где документ уже сильный, а где не хватает точности.
-                  </p>
-                </div>
-                <div className="senior-summary-card">
-                  <div className="section-title text-slate-500">Что исправить</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-900">
-                    {topIssue?.section_title || 'Посмотрите основные замечания'}
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {topIssue?.explanation || 'Сначала исправьте замечания с высоким приоритетом и добавьте недостающие разделы.'}
-                  </p>
-                </div>
-                <div className="senior-summary-card">
-                  <div className="section-title text-slate-500">Что делать дальше</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-900">Первое действие</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{primaryAction}</p>
-                </div>
-              </section>
-            )}
-
             {seniorMode ? (
-              /* ── ПРОСТОЙ РЕЖИМ: крупная цветная карточка с оценкой ── */
-              <section className="mt-6">
+              /* ══════════════════════════════════════════════
+                 ПРОСТОЙ РЕЖИМ — линейный скролл, без вкладок
+                 ══════════════════════════════════════════════ */
+              <div className="space-y-5">
+
+                {/* 1. Оценка */}
                 {(() => {
-                  const tone = score >= 75
-                    ? { border: 'border-emerald-300', bg: 'bg-emerald-50', numColor: 'text-emerald-600', label: 'Хороший документ', labelBg: 'bg-emerald-100 text-emerald-700' }
-                    : score >= 50
-                    ? { border: 'border-amber-300', bg: 'bg-amber-50', numColor: 'text-amber-600', label: 'Нужна доработка', labelBg: 'bg-amber-100 text-amber-700' }
-                    : { border: 'border-rose-300', bg: 'bg-rose-50', numColor: 'text-rose-600', label: 'Требуется переработка', labelBg: 'bg-rose-100 text-rose-700' }
+                  const isGood = score >= 75
+                  const isMid  = score >= 50
+                  const bg     = isGood ? 'bg-emerald-50 border-emerald-200' : isMid ? 'bg-amber-50 border-amber-200' : 'bg-rose-50 border-rose-200'
+                  const numCls = isGood ? 'text-emerald-600' : isMid ? 'text-amber-600' : 'text-rose-600'
+                  const label  = isGood ? 'Хороший документ' : isMid ? 'Нужна доработка' : 'Требуется переработка'
                   return (
-                    <div className={`rounded-[28px] border-2 p-7 ${tone.border} ${tone.bg}`}>
+                    <div className={`rounded-[28px] border-2 p-8 ${bg}`}>
                       <div className="flex flex-wrap items-center gap-6">
-                        <div className="text-center">
-                          <div className={`text-7xl font-bold leading-none tabular-nums ${tone.numColor}`}>{score}</div>
-                          <div className="mt-2 text-sm text-slate-500">из 100</div>
+                        <div className="text-center min-w-[90px]">
+                          <div className={`text-8xl font-black leading-none tabular-nums ${numCls}`}>{score}</div>
+                          <div className="mt-1 text-base text-slate-500">из 100</div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <span className={`inline-block rounded-full px-4 py-1.5 text-base font-bold ${tone.labelBg}`}>
-                            {tone.label}
-                          </span>
-                          <p className="mt-3 text-lg leading-7 text-slate-700">
+                        <div>
+                          <div className={`text-2xl font-bold ${numCls}`}>{label}</div>
+                          <p className="mt-2 text-lg leading-7 text-slate-700">
                             Найдено замечаний: <strong>{issueCount}</strong>
-                            {criticalCount > 0 && <>, из них критичных: <strong className="text-rose-600">{criticalCount}</strong></>}.
-                          </p>
-                          <p className="mt-2 text-base leading-7 text-slate-600">
-                            {criticalCount > 0
-                              ? 'Перейдите во вкладку «Что не так» и исправьте замечания сверху вниз.'
-                              : 'Перейдите во вкладку «Что исправить» — там конкретные рекомендации.'}
+                            {criticalCount > 0 && <span className="text-rose-600">, из них важных: <strong>{criticalCount}</strong></span>}
                           </p>
                         </div>
                       </div>
                     </div>
                   )
                 })()}
-              </section>
-            ) : (
-              /* ── ОБЫЧНЫЙ РЕЖИМ: gauge + breakdown ── */
-              <section className="mt-6 card">
-                <div className="mb-5">
-                  <div className="section-title text-slate-500">Score breakdown</div>
-                  <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Декомпозиция итогового балла</h3>
-                </div>
-                <div className="grid gap-8 lg:grid-cols-[200px_1fr] lg:items-start">
-                  <div className="flex justify-center lg:justify-start">
-                    <ScoreGauge score={analysis.score} />
-                  </div>
-                  <ScoreBreakdown breakdown={analysis.score_breakdown} />
-                </div>
-              </section>
-            )}
 
-            {!seniorMode && (
-              <section className="mt-6 card">
-                <div className="section-title text-slate-500">Pipeline status</div>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Как система пришла к этому выводу</h3>
-                <div className="mt-5">
-                  <PipelineProgress status="completed" />
+                {/* 2. Первый шаг */}
+                <div className="rounded-[24px] border-2 border-blue-200 bg-blue-50 p-7">
+                  <div className="text-lg font-bold text-blue-800">С чего начать:</div>
+                  <p className="mt-2 text-lg leading-7 text-slate-700">
+                    {criticalCount > 0
+                      ? topIssue?.suggestion || primaryAction
+                      : primaryAction}
+                  </p>
                 </div>
-              </section>
-            )}
 
-            <section className="mt-6 flex gap-2 overflow-x-auto pb-1">
-              {tabs.map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setActiveTab(key)}
-                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
-                    activeTab === key
-                      ? 'border-cyan-500 bg-cyan-500 text-white shadow-[0_12px_24px_rgba(6,182,212,0.22)]'
-                      : 'border-slate-200 bg-white/85 text-slate-600 hover:border-cyan-200 hover:text-slate-900'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </section>
-
-            {activeTab === 'overview' && (
-              <section className="mt-6 space-y-6">
-                {!seniorMode && (
-                  <div className="page-section">
-                    <LogicGraph sections={analysis.sections || []} missingSections={missingSections} />
+                {/* 3. Список замечаний — простые фразы */}
+                {(analysis.issues || []).length > 0 && (
+                  <div className="rounded-[24px] border-2 border-slate-200 bg-white p-7">
+                    <h2 className="text-2xl font-bold text-slate-900">Что не так в документе</h2>
+                    <div className="mt-5 space-y-4">
+                      {(analysis.issues || []).slice(0, 6).map((issue, i) => (
+                        <div key={i} className={`rounded-[18px] border-2 p-5 ${
+                          issue.severity === 'high' ? 'border-rose-200 bg-rose-50' :
+                          issue.severity === 'medium' ? 'border-amber-200 bg-amber-50' :
+                          'border-slate-200 bg-slate-50'
+                        }`}>
+                          <div className="font-semibold text-slate-800">
+                            {issue.section_title && <span className="text-slate-500">{issue.section_title}: </span>}
+                            {issue.explanation}
+                          </div>
+                          {issue.suggestion && (
+                            <p className="mt-2 text-base leading-6 text-slate-600">
+                              <span className="font-semibold">Как исправить:</span> {issue.suggestion}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
-                <div className="grid gap-6 lg:grid-cols-2">
-                  <div className="card">
-                    <div className="section-title text-slate-500">Структура документа</div>
-                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Найденные и недостающие разделы</h3>
+                {/* 4. Что делать */}
+                {(analysis.recommendations || []).length > 0 && (
+                  <div className="rounded-[24px] border-2 border-slate-200 bg-white p-7">
+                    <h2 className="text-2xl font-bold text-slate-900">Что нужно исправить</h2>
+                    <div className="mt-5 space-y-3">
+                      {(analysis.recommendations || []).slice(0, 5).map((rec, i) => (
+                        <div key={i} className="flex gap-4 rounded-[16px] border border-slate-200 bg-slate-50 p-4">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-base font-bold text-blue-700">
+                            {i + 1}
+                          </div>
+                          <p className="text-base leading-6 text-slate-700">{rec.suggestion}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 5. Кнопки действий */}
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <button onClick={handleDownloadPDF} disabled={downloading} className="btn-primary flex-1 py-4 text-base">
+                    {downloading ? 'Подготовка...' : 'Скачать отчёт (PDF)'}
+                  </button>
+                  <Link to={`/chat/${docId}`} className="btn-secondary flex-1 py-4 text-center text-base">
+                    Задать вопрос AI
+                  </Link>
+                </div>
+
+                {/* 6. Улучшенный текст — в конце */}
+                {improved?.improved_text && (
+                  <div className="rounded-[24px] border-2 border-slate-200 bg-white p-7">
+                    <h2 className="text-2xl font-bold text-slate-900">Готовый улучшенный текст</h2>
+                    <p className="mt-2 text-base text-slate-500">Система переписала ваш документ, исправив найденные замечания.</p>
                     <div className="mt-5">
-                      <SectionChecklist sections={analysis.sections || []} missingSections={missingSections} />
+                      <ImprovedDocViewer originalText={improved?.original_text} improvedText={improved?.improved_text} />
                     </div>
-                    {missingSections.length > 0 && (
-                      <div className="mt-4 rounded-[20px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                        Отсутствуют обязательные разделы: {missingSections.join(', ')}
-                      </div>
-                    )}
                   </div>
+                )}
 
-                  <div className="card">
-                    <div className="section-title text-slate-500">Сводка</div>
-                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Ключевые показатели документа</h3>
-                    {analysis.document_summary && (
-                      <p className="mt-4 text-sm leading-6 text-slate-600">{analysis.document_summary}</p>
-                    )}
-                    <div className="mt-6 space-y-3">
-                      <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
-                        <span className="text-sm text-slate-500">Логическая связность</span>
-                        <span className="text-sm font-semibold text-slate-900">{analysis.consistency_score || 0} / 100</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
-                        <span className="text-sm text-slate-500">Всего проблем</span>
-                        <span className="text-sm font-semibold text-slate-900">{issueCount}</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
-                        <span className="text-sm text-slate-500">Критичных замечаний</span>
-                        <span className="text-sm font-semibold text-rose-700">{criticalCount}</span>
+              </div>
+            ) : (
+              /* ══════════════════════════════════════════════
+                 ОБЫЧНЫЙ РЕЖИМ — hero + вкладки
+                 ══════════════════════════════════════════════ */
+              <>
+                <section className="hero-panel">
+                  <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+                    <div>
+                      <div className="section-title">Executive summary</div>
+                      <h2 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-white md:text-[2.35rem]">
+                        Документ уже получил расчет score, логическую проверку и объяснимые замечания.
+                      </h2>
+                      <p className="mt-4 max-w-3xl text-base leading-7 text-slate-200">
+                        {analysis.document_summary || 'Система подготовила структурную оценку, выявила слабые места и собрала улучшения по ключевым разделам.'}
+                      </p>
+                      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                        <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                          <div className="text-sm text-slate-400">Общий score</div>
+                          <div className="mt-2 text-3xl font-semibold text-white">{score}</div>
+                        </div>
+                        <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                          <div className="text-sm text-slate-400">Проблем найдено</div>
+                          <div className="mt-2 text-3xl font-semibold text-cyan-300">{issueCount}</div>
+                        </div>
+                        <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                          <div className="text-sm text-slate-400">Связность документа</div>
+                          <div className="mt-2 text-3xl font-semibold text-emerald-300">{analysis.consistency_score || 0}</div>
+                        </div>
                       </div>
                     </div>
-                    {analysis.overall_coherence && (
-                      <p className="mt-5 text-sm italic leading-6 text-slate-500">{analysis.overall_coherence}</p>
-                    )}
+                    <div className="rounded-[26px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Приоритет для доработки</div>
+                      <div className="mt-3 text-xl font-semibold text-white">
+                        {topIssue?.section_title || 'Сначала проверьте раздел рекомендаций'}
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-slate-300">
+                        {topIssue?.explanation || primaryAction}
+                      </p>
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        <div className="nav-pill">Critical: {criticalCount}</div>
+                        <div className="nav-pill">Missing: {missingSections.length}</div>
+                        <div className="nav-pill">KPI ready</div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </section>
-            )}
+                </section>
 
-            {activeTab === 'issues' && (
-              <section className="mt-6 card">
-                <div className="section-title text-slate-500">{seniorMode ? 'Замечания к документу' : 'Explainable AI'}</div>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Что именно не так в документе</h3>
-                <div className="mt-5">
-                  <IssuesList issues={analysis.issues || []} />
-                </div>
-              </section>
-            )}
+                <section className="mt-6 card">
+                  <div className="mb-5">
+                    <div className="section-title text-slate-500">Score breakdown</div>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Декомпозиция итогового балла</h3>
+                  </div>
+                  <div className="grid gap-8 lg:grid-cols-[200px_1fr] lg:items-start">
+                    <div className="flex justify-center lg:justify-start">
+                      <ScoreGauge score={analysis.score} />
+                    </div>
+                    <ScoreBreakdown breakdown={analysis.score_breakdown} />
+                  </div>
+                </section>
 
-            {activeTab === 'recommendations' && (
-              <section className="mt-6 space-y-6">
-                <div className="card">
-                  <div className="section-title text-slate-500">{seniorMode ? 'Что нужно исправить' : 'Action plan'}</div>
-                  <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Рекомендации по улучшению</h3>
+                <section className="mt-6 card">
+                  <div className="section-title text-slate-500">Pipeline status</div>
+                  <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Как система пришла к этому выводу</h3>
                   <div className="mt-5">
-                    <RecommendationsList recommendations={analysis.recommendations || []} />
+                    <PipelineProgress status="completed" />
                   </div>
-                </div>
-                {!seniorMode && <KpiGenerator analysis={analysis} />}
-              </section>
-            )}
+                </section>
 
-            {activeTab === 'improved' && (
-              <section className="mt-6 card">
-                <div className="section-title text-slate-500">{seniorMode ? 'Улучшенная версия' : 'Improved text'}</div>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Улучшенная версия ТЗ</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-500">
-                  Система уточняет формулировки и делает текст более измеримым, сохраняя исходный смысл документа.
-                </p>
-                <div className="mt-5">
-                  <ImprovedDocViewer originalText={improved?.original_text} improvedText={improved?.improved_text} />
-                </div>
-              </section>
+                <section className="mt-6 flex gap-2 overflow-x-auto pb-1">
+                  {tabs.map(({ key, label }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setActiveTab(key)}
+                      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
+                        activeTab === key
+                          ? 'border-cyan-500 bg-cyan-500 text-white shadow-[0_12px_24px_rgba(6,182,212,0.22)]'
+                          : 'border-slate-200 bg-white/85 text-slate-600 hover:border-cyan-200 hover:text-slate-900'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </section>
+
+                {activeTab === 'overview' && (
+                  <section className="mt-6 space-y-6">
+                    <div className="page-section">
+                      <LogicGraph sections={analysis.sections || []} missingSections={missingSections} />
+                    </div>
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <div className="card">
+                        <div className="section-title text-slate-500">Структура документа</div>
+                        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Найденные и недостающие разделы</h3>
+                        <div className="mt-5">
+                          <SectionChecklist sections={analysis.sections || []} missingSections={missingSections} />
+                        </div>
+                        {missingSections.length > 0 && (
+                          <div className="mt-4 rounded-[20px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                            Отсутствуют обязательные разделы: {missingSections.join(', ')}
+                          </div>
+                        )}
+                      </div>
+                      <div className="card">
+                        <div className="section-title text-slate-500">Сводка</div>
+                        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Ключевые показатели документа</h3>
+                        {analysis.document_summary && (
+                          <p className="mt-4 text-sm leading-6 text-slate-600">{analysis.document_summary}</p>
+                        )}
+                        <div className="mt-6 space-y-3">
+                          <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
+                            <span className="text-sm text-slate-500">Логическая связность</span>
+                            <span className="text-sm font-semibold text-slate-900">{analysis.consistency_score || 0} / 100</span>
+                          </div>
+                          <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
+                            <span className="text-sm text-slate-500">Всего проблем</span>
+                            <span className="text-sm font-semibold text-slate-900">{issueCount}</span>
+                          </div>
+                          <div className="flex items-center justify-between rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
+                            <span className="text-sm text-slate-500">Критичных замечаний</span>
+                            <span className="text-sm font-semibold text-rose-700">{criticalCount}</span>
+                          </div>
+                        </div>
+                        {analysis.overall_coherence && (
+                          <p className="mt-5 text-sm italic leading-6 text-slate-500">{analysis.overall_coherence}</p>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+                )}
+
+                {activeTab === 'issues' && (
+                  <section className="mt-6 card">
+                    <div className="section-title text-slate-500">Explainable AI</div>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Что именно не так в документе</h3>
+                    <div className="mt-5">
+                      <IssuesList issues={analysis.issues || []} />
+                    </div>
+                  </section>
+                )}
+
+                {activeTab === 'recommendations' && (
+                  <section className="mt-6 space-y-6">
+                    <div className="card">
+                      <div className="section-title text-slate-500">Action plan</div>
+                      <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Рекомендации по улучшению</h3>
+                      <div className="mt-5">
+                        <RecommendationsList recommendations={analysis.recommendations || []} />
+                      </div>
+                    </div>
+                    <KpiGenerator analysis={analysis} />
+                  </section>
+                )}
+
+                {activeTab === 'improved' && (
+                  <section className="mt-6 card">
+                    <div className="section-title text-slate-500">Improved text</div>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Улучшенная версия ТЗ</h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-500">
+                      Система уточняет формулировки и делает текст более измеримым, сохраняя исходный смысл документа.
+                    </p>
+                    <div className="mt-5">
+                      <ImprovedDocViewer originalText={improved?.original_text} improvedText={improved?.improved_text} />
+                    </div>
+                  </section>
+                )}
+              </>
             )}
           </>
         )}

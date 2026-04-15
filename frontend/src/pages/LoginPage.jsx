@@ -30,26 +30,39 @@ export default function LoginPage() {
   return (
     <div className="app-shell flex items-center justify-center px-6 py-10">
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <section className="hero-panel hidden lg:block">
-          <div className="section-title">Научная платформа</div>
-          <h1 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight">
-            Вход в AI-платформу для анализа технических заданий и исследовательской логики.
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-            Сервис помогает увидеть слабые формулировки, недостающие разделы, разрывы между целью и KPI,
-            а также готовит понятный отчет для доработки документа.
-          </p>
-          <div className="mt-8 grid gap-3">
+        <section className="hero-panel hidden lg:flex lg:flex-col lg:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{background:'linear-gradient(135deg,#3b9eff,#0c72f5)',boxShadow:'0 4px 16px rgba(12,114,245,0.35)'}}>
+                <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-6-6Z" strokeLinejoin="round"/>
+                  <path d="M9 3v6h10M8 13h8M8 17h5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <span className="text-2xl font-bold tracking-tight text-white" style={{letterSpacing:'-0.03em'}}>
+                tz<span style={{color:'#3b9eff'}}>ex</span>
+              </span>
+            </div>
+            <h1 className="mt-8 max-w-sm text-[2.2rem] font-bold leading-[1.15] tracking-tight text-white">
+              Анализируйте ТЗ с точностью эксперта.
+            </h1>
+            <p className="mt-4 max-w-sm text-base leading-7 text-slate-400">
+              Загрузите документ — получите оценку, замечания и готовый улучшенный текст за секунды.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-3">
             {[
-              'Оценка структуры и полноты документа.',
-              'RAG-сопоставление с эталонными примерами.',
-              'Explainable AI с понятными рекомендациями.',
-            ].map((item, index) => (
-              <div key={item} className="flex items-start gap-3 rounded-[20px] border border-white/10 bg-white/5 p-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-400/10 text-sm font-semibold text-cyan-200">
-                  {index + 1}
+              { icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 0 0 1.946-.806 3.42 3.42 0 0 1 4.438 0 3.42 3.42 0 0 0 1.946.806 3.42 3.42 0 0 1 3.138 3.138 3.42 3.42 0 0 0 .806 1.946 3.42 3.42 0 0 1 0 4.438 3.42 3.42 0 0 0-.806 1.946 3.42 3.42 0 0 1-3.138 3.138 3.42 3.42 0 0 0-1.946.806 3.42 3.42 0 0 1-4.438 0 3.42 3.42 0 0 0-1.946-.806 3.42 3.42 0 0 1-3.138-3.138 3.42 3.42 0 0 0-.806-1.946 3.42 3.42 0 0 1 0-4.438 3.42 3.42 0 0 0 .806-1.946 3.42 3.42 0 0 1 3.138-3.138z', label: 'Оценка по 5 критериям качества' },
+              { icon: 'M4 7h16M4 12h10M4 17h7', label: 'RAG-анализ на реальных примерах' },
+              { icon: 'M13 10V3L4 14h7v7l9-11h-7z', label: 'Улучшенный текст и PDF-отчёт' },
+            ].map(({ icon, label }) => (
+              <div key={label} className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/5 px-4 py-3 backdrop-blur">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300">
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={icon}/>
+                  </svg>
                 </div>
-                <div className="text-sm leading-6 text-slate-300">{item}</div>
+                <span className="text-sm font-medium text-slate-300">{label}</span>
               </div>
             ))}
           </div>

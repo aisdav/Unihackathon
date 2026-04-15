@@ -41,6 +41,16 @@ const TABS = [
   { key: 'original', label: 'Оригинал' },
 ]
 
+function downloadTxt(text, filename = 'improved_tz.txt') {
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 export default function ImprovedDocViewer({ originalText, improvedText }) {
   const [tab, setTab] = useState('diff')
   const highlightedOriginal = useMemo(() => renderHighlighted(originalText || ''), [originalText])
@@ -63,7 +73,7 @@ export default function ImprovedDocViewer({ originalText, improvedText }) {
         </p>
       </div>
 
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         {TABS.map(({ key, label }) => (
           <button
             key={key}
@@ -78,6 +88,17 @@ export default function ImprovedDocViewer({ originalText, improvedText }) {
             {label}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={() => downloadTxt(improvedText)}
+          className="ml-auto inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-1.5 text-sm font-semibold text-slate-600 transition-all hover:border-cyan-200 hover:text-slate-900"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M12 4v10M8 10l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M5 18.5h14" strokeLinecap="round" />
+          </svg>
+          Скачать TXT
+        </button>
       </div>
 
       <div className="overflow-hidden rounded-[18px] border border-slate-200 text-sm">

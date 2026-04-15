@@ -88,17 +88,20 @@ export default function DashboardPage() {
     <div className="app-shell">
       <header className="page-header px-6 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="science-panel flex h-12 w-12 items-center justify-center rounded-2xl">
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M10 3v4.5L5.5 16a3.5 3.5 0 0 0 3.09 5h6.82a3.5 3.5 0 0 0 3.09-5L14 7.5V3" />
-                <path d="M8 3h8" />
-                <path d="M8.5 14h7" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{background:'linear-gradient(135deg,#3b9eff,#0c72f5)',boxShadow:'0 4px 16px rgba(12,114,245,0.35)'}}>
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-6-6Z" strokeLinejoin="round"/>
+                <path d="M9 3v6h10M8 13h8M8 17h5" strokeLinecap="round"/>
               </svg>
             </div>
-            <div>
-              {!seniorMode && <div className="nav-pill w-fit">Scientific specification analysis</div>}
-              <h1 className="mt-2 text-xl font-semibold tracking-tight text-slate-50">AI-платформа анализа ТЗ</h1>
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-2xl font-bold tracking-tight text-white" style={{letterSpacing:'-0.03em'}}>
+                tz<span style={{color:'#3b9eff'}}>ex</span>
+              </span>
+              {!seniorMode && (
+                <span className="hidden text-xs font-medium text-slate-400 md:block">AI-анализ технических заданий</span>
+              )}
             </div>
           </div>
 
@@ -106,6 +109,12 @@ export default function DashboardPage() {
             <div className="hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-right text-sm text-slate-300 md:block">
               <div>{user?.name || user?.email}</div>
             </div>
+            <Link to="/rag" className="btn-secondary hidden md:inline-flex">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M4 6h16M4 10h16M4 14h10M4 18h7" strokeLinecap="round"/>
+              </svg>
+              База RAG
+            </Link>
             <button onClick={signOut} className="btn-secondary">
               Выйти
             </button>
@@ -151,13 +160,13 @@ export default function DashboardPage() {
           <section className="hero-panel">
             <div className="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
               <div>
-                <div className="section-title">Рабочая панель</div>
-                <h2 className="mt-3 max-w-2xl text-3xl font-semibold leading-tight text-white md:text-[2.4rem]">
-                  Проверяйте технические задания как исследовательский артефакт, а не просто текстовый файл.
+                <div className="section-title mb-1 text-blue-400/80">Рабочая панель</div>
+                <h2 className="mt-3 max-w-2xl text-3xl font-bold leading-tight tracking-tight text-white md:text-[2.2rem]" style={{letterSpacing:'-0.02em'}}>
+                  Загрузите ТЗ — tzex найдёт всё, что мешает проекту стартовать.
                 </h2>
-                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-200">
-                  Сервис оценивает структуру, связность, измеримость и практическую применимость документа,
-                  а затем предлагает понятные улучшения и готовый отчет.
+                <p className="mt-4 max-w-xl text-base leading-7 text-slate-400">
+                  Оценка структуры, ясности и логики документа за секунды.
+                  Конкретные замечания, рекомендации и готовый улучшенный текст.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link to="/upload" className="btn-primary">Загрузить новое ТЗ</Link>

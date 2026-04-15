@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import analysis, auth, chat, documents, reports
+from app.api import analysis, auth, chat, documents, rag, reports
 from app.services.rag_service import init_rag_from_seed
 
 
@@ -37,6 +37,7 @@ app.include_router(documents.router)
 app.include_router(analysis.router)
 app.include_router(chat.router)
 app.include_router(reports.router)
+app.include_router(rag.router)
 
 
 @app.get("/health")
