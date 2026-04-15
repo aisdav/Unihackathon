@@ -564,33 +564,41 @@ def _aggregate_results(structure: dict, quality_results: list, consistency: dict
     present_required_count = _count_present_required_sections(sections)
     avg_dimension_score = sum(dim_sums.values()) / (len(dim_sums) * max(section_count, 1))
 
-    coverage_bonus = present_required_count / 6 * 18
-    quality_bonus = max(0, (avg_dimension_score - 3) * 12)
-    missing_penalty = len(missing_types) * 5
+    coverage_bonus = present_required_count / 6 * 20
+    quality_bonus = max(0, (avg_dimension_score - 3) * 16)
+    # missing_types reported by the structure AI can be noisy; cap penalty and weight lightly
+    missing_penalty = min(len(missing_types), 2) * 4
     high_issues = sum(1 for i in all_issues if i.get("severity") == "high")
     medium_issues = sum(1 for i in all_issues if i.get("severity") == "medium")
     low_issues = sum(1 for i in all_issues if i.get("severity") == "low")
-    consistency_bonus = consistency.get("consistency_score", 70) / 100 * 8
+    consistency_bonus = consistency.get("consistency_score", 70) / 100 * 10
+
+    # bonus for full required section coverage with no truly missing required types
+    full_coverage_bonus = 6 if present_required_count == 6 else 0
 
     raw_score = (
         base_score * 0.55
         + coverage_bonus
         + quality_bonus
         + consistency_bonus
+        + full_coverage_bonus
         - missing_penalty
-        - high_issues * 2
-        - medium_issues * 0.75
-        - low_issues * 0.25
+        - high_issues * 1.2
+        - medium_issues * 0.5
+        - low_issues * 0.2
     )
 
     # Guardrail for "good but not perfect" documents:
     # if the document covers almost all required sections and the section quality
     # is consistently above average, don't let issue accumulation push it too low.
     calibrated_floor = 0
-    if present_required_count >= 5 and avg_dimension_score >= 3.5 and consistency.get("consistency_score", 70) >= 75:
-        calibrated_floor = 70 if len(missing_types) == 0 else 64
+    consistency_ok = consistency.get("consistency_score", 70) >= 75
+    if present_required_count == 6 and avg_dimension_score >= 3.8 and consistency_ok and len(missing_types) == 0:
+        calibrated_floor = 82
+    elif present_required_count >= 5 and avg_dimension_score >= 3.5 and consistency_ok:
+        calibrated_floor = 74 if len(missing_types) == 0 else 68
     elif present_required_count >= 4 and avg_dimension_score >= 3.3 and consistency.get("consistency_score", 70) >= 70:
-        calibrated_floor = 58 if len(missing_types) <= 1 else 52
+        calibrated_floor = 60 if len(missing_types) <= 1 else 54
 
     final_score = max(0, min(100, max(raw_score, calibrated_floor)))
 
